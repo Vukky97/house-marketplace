@@ -6,6 +6,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from 'firebase/storage';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
@@ -73,7 +74,7 @@ function CreateListing() {
 
     setLoading(true);
 
-    if (discountedPrice >= regularPrice) {
+    if (+discountedPrice >= +regularPrice) {
       setLoading(false);
       toast.error('Discounted price should be less than regular price.');
       return;
@@ -114,6 +115,10 @@ function CreateListing() {
     } else {
       geoLocation.lat = latitude;
       geoLocation.lng = longitude;
+
+      // If Google formatted address dont working well,
+      //commnet it, and use what the user types
+      // instead of Google formatted adress
       location = address;
     }
 
@@ -165,7 +170,7 @@ function CreateListing() {
 
     // Runs on every image which is in the state
     // Returns with promise resolve, whic is the upload link
-    const imgUrls = await Promise.all(
+    const imageUrls = await Promise.all(
       [...images].map((image) => storeImage(image))
     ).catch(() => {
       setLoading(false);
@@ -173,9 +178,42 @@ function CreateListing() {
       return;
     });
 
-    console.log(imgUrls);
+    //console.log(imageUrls);
+
+    const formDataCopy = {
+      ...formData,
+      imageUrls,
+      geoLocation,
+      timestamp: serverTimestamp(),
+    };
+
+    // Delete uneccesary fields
+    // We dont use the pictures selected from the form,
+    // we upload it and use the links instead
+    delete formDataCopy.images;
+
+    // we set location to formatted adress
+    delete formDataCopy.address;
+
+    location && (formDataCopy.location = location);
+    // If Google formatted address dont working well:
+    //formDataCopy.location = address;
+
+    // If theres no offer, delete the discounted price
+    !formDataCopy.offer && delete formDataCopy.discountedPrice;
+
+    console.log('Form data original: ');
+    console.log(formData);
+    console.dir(formData);
+
+    console.log('Form data copy: ');
+    console.log(formDataCopy);
+    console.dir(formDataCopy);
+    const docRef = await addDoc(collection(db, 'listings'), formDataCopy);
 
     setLoading(false);
+    toast.success('Listing added.');
+    navigate(`/category/${formDataCopy.type}/${docRef.id}`);
   };
 
   const onMutate = (e) => {
