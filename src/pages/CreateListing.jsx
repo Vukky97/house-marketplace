@@ -202,13 +202,6 @@ function CreateListing() {
     // If theres no offer, delete the discounted price
     !formDataCopy.offer && delete formDataCopy.discountedPrice;
 
-    console.log('Form data original: ');
-    console.log(formData);
-    console.dir(formData);
-
-    console.log('Form data copy: ');
-    console.log(formDataCopy);
-    console.dir(formDataCopy);
     const docRef = await addDoc(collection(db, 'listings'), formDataCopy);
 
     setLoading(false);
