@@ -6,6 +6,10 @@ import { db } from '../firebase.config';
 import Spinner from '../components/Spinner';
 import shareIcon from '../assets/svg/shareIcon.svg';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
+SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
 function Listing() {
   const [listing, setListing] = useState(null);
@@ -24,7 +28,6 @@ function Listing() {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        console.log(docSnap.data());
         setListing(docSnap.data());
         setLoading(false);
       }
@@ -36,11 +39,35 @@ function Listing() {
     return <Spinner />;
   }
 
-  console.log(listing);
-
   return (
     <main>
-      {/* SLIDER */}
+      <Swiper
+        pagination={{ clickable: true }}
+        breakpoints={{
+          // when window width is >= 640px
+          640: {
+            slidesPerView: 1,
+          },
+          // when window width is >= 768px
+          768: {
+            slidesPerView: 2,
+          },
+        }}
+      >
+        {listing.imageUrls.map((url, index) => (
+          <SwiperSlide key={index}>
+            {console.log(listing.imageUrls[index])}
+            <div
+              style={{
+                background: `url(${listing.imageUrls[index]}) center no-repeat`,
+                backgroundSize: 'cover',
+              }}
+              className='swiperSlideDiv'
+            ></div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
       <div
         className='shareIconDiv'
         onClick={() => {
@@ -107,6 +134,7 @@ function Listing() {
             <Marker
               position={[listing.geoLocation.lat, listing.geoLocation.lng]}
             >
+              Arghh
               <Popup>{listing.location}</Popup>
             </Marker>
           </MapContainer>

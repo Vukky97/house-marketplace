@@ -126,7 +126,12 @@ function CreateListing() {
     const storeImage = async (image) => {
       return new Promise((resolve, reject) => {
         const storage = getStorage();
-        const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+
+        // clean "(1)"" from filname, because it cause problems to show to firebase
+        const cleanedImageName = image.name.replace(/([^a-z0-9]+)/gi, '-');
+        const fileName = `${
+          auth.currentUser.uid
+        }-${cleanedImageName}-${uuidv4()}`;
 
         const storageRef = ref(storage, 'images/' + fileName);
 
@@ -194,6 +199,10 @@ function CreateListing() {
 
     // we set location to formatted adress
     delete formDataCopy.address;
+
+    // we use the geoLocation array, not the singel values:
+    delete formDataCopy.latitude;
+    delete formDataCopy.longitude;
 
     location && (formDataCopy.location = location);
     // If Google formatted address dont working well:
