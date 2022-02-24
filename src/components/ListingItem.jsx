@@ -5,7 +5,7 @@ import bathtubIcon from '../assets/svg/bathtubIcon.svg';
 
 function ListingItem({ listing, id, onDelete }) {
   return (
-    <li className='categoryListing'>
+    <div className='categoryListing'>
       <Link
         to={`/category/${listing.type}/${id}`}
         className='categoryListingLink'
@@ -54,7 +54,7 @@ function ListingItem({ listing, id, onDelete }) {
           onClick={() => onDelete(listing.id, listing.name)}
         />
       )}
-    </li>
+    </div>
   );
 }
 

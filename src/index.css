@@ -80,7 +80,7 @@ button {
 }
 @media (min-width: 1024px) {
   .removeIcon {
-    right: 10%;
+    right: 11%;
   }
 }
 
@@ -408,8 +408,12 @@ button {
 }
 @media (min-width: 1024px) {
   .listingsList {
-    width: 50%;
+    width: 100%;
     padding-inline-start: 40px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-flow: row wrap;
   }
 }
 
@@ -419,12 +423,16 @@ button {
 
 @media (min-width: 1024px) {
   .categoryListings {
-    width: 50%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-flow: row wrap;
     padding-inline-start: 40px;
   }
 }
 
 .categoryListing {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -433,6 +441,7 @@ button {
 }
 @media (min-width: 1024px) {
   .categoryListing {
+    width: 50%;
     display: flex;
     justify-content: space-between;
     align-items: center;

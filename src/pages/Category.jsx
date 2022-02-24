@@ -70,7 +70,7 @@ function Category() {
       ) : listings && listings.length > 0 ? (
         <>
           <main>
-            <ul className='categoryListings'>
+            <div className='categoryListings'>
               {listings.map((listing) => (
                 <ListingItem
                   listing={listing.data}
@@ -78,7 +78,7 @@ function Category() {
                   key={listing.id}
                 />
               ))}
-            </ul>
+            </div>
           </main>
         </>
       ) : (
