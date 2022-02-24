@@ -75,9 +75,15 @@ button {
 .removeIcon {
   cursor: pointer;
   position: absolute;
-  top: -3%;
-  right: -2%;
+  bottom: 45%;
+  right: 0;
 }
+@media (min-width: 1024px) {
+  .removeIcon {
+    right: 10%;
+  }
+}
+
 .editIcon {
   cursor: pointer;
   position: absolute;
@@ -339,12 +345,12 @@ button {
 .swiperSlideText {
   color: #ffffff;
   position: absolute;
-  top: 70px;
+  bottom: 60px;
   left: 0;
   font-weight: 600;
   max-width: 90%;
   font-size: 1.25rem;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
   padding: 0.5rem;
 }
 @media (min-width: 1024px) {
@@ -356,7 +362,7 @@ button {
 .swiperSlidePrice {
   color: #000000;
   position: absolute;
-  top: 143px;
+  bottom: 20px;
   left: 11px;
   font-weight: 600;
   max-width: 90%;
@@ -396,8 +402,26 @@ button {
   margin-bottom: 10rem;
 }
 
+.listingsList {
+  width: 100%;
+  padding-inline-start: 10px;
+}
+@media (min-width: 1024px) {
+  .listingsList {
+    width: 50%;
+    padding-inline-start: 40px;
+  }
+}
+
 .categoryListings {
   padding: 0;
+}
+
+@media (min-width: 1024px) {
+  .categoryListings {
+    width: 50%;
+    padding-inline-start: 40px;
+  }
 }
 
 .categoryListing {
@@ -407,13 +431,22 @@ button {
   margin-bottom: 1rem;
   position: relative;
 }
+@media (min-width: 1024px) {
+  .categoryListing {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+}
 
 .categoryListingLink {
   display: contents;
 }
 
 .categoryListingImg {
-  width: 30%;
+  width: 40%;
   height: 135px;
   border-radius: 1.5rem;
   object-fit: cover;
@@ -421,17 +454,17 @@ button {
 @media (min-width: 1024px) {
   .categoryListingImg {
     height: 100px;
-    width: 19%;
+    width: 38%;
     height: 217px;
   }
 }
 
 .categoryListingDetails {
-  width: 65%;
+  width: 55%;
 }
 @media (min-width: 1024px) {
   .categoryListingDetails {
-    width: 79%;
+    width: 60%;
   }
 }
 
