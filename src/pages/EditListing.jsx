@@ -5,6 +5,7 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  deleteObject,
 } from 'firebase/storage';
 import { serverTimestamp, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase.config';
@@ -244,9 +245,35 @@ function EditListing() {
     const docRef = doc(db, 'listings', params.listingId);
     await updateDoc(docRef, formDataCopy);
 
+    // Delete previous pictures:
+    deletePreviousImages();
+
     setLoading(false);
     toast.success('Listing added.');
     navigate(`/category/${formDataCopy.type}/${docRef.id}`);
+  };
+
+  const deletePreviousImages = async () => {
+    const storage = getStorage();
+
+    const imagesArray = listing.imageUrls;
+
+    imagesArray.forEach((urlToDelete) => {
+      //console.log(urlToDelete);
+      let fileName = urlToDelete.split('/').pop().split('#')[0].split('?')[0];
+      fileName = fileName.replace('%2F', '/');
+
+      const imageToDeleteRef = ref(storage, `${fileName}`);
+
+      //Delete the file
+      deleteObject(imageToDeleteRef)
+        .then(() => {
+          toast.success('Deleted previous images');
+        })
+        .catch((error) => {
+          toast.error('Failed to delete images');
+        });
+    });
   };
 
   const onMutate = (e) => {

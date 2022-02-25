@@ -98,21 +98,31 @@ function Profile() {
       // Delete pictures from firebase filestorage
       const storage = getStorage();
 
-      console.log(listings[0].data.imageUrls);
-      // Create a reference to the file to delete
-      const imageToDeleteRef = ref(storage, 'images/desert.jpg');
-      // Delete the file
-      // deleteObject(imageToDeleteRef)
-      //   .then(() => {
-      //     // File deleted successfully
-      //     console.log('delete pics runs');
-      //   })
-      //   .catch((error) => {
-      //     toast.error('Failed to delete images');
-      //   });
+      const imagesToDelete = listings.filter(
+        (listing) => listing.id === listingId
+      );
+
+      const imagesArray = imagesToDelete[0].data.imageUrls;
+
+      imagesArray.forEach((urlToDelete) => {
+        //console.log(urlToDelete);
+        let fileName = urlToDelete.split('/').pop().split('#')[0].split('?')[0];
+        fileName = fileName.replace('%2F', '/');
+
+        const imageToDeleteRef = ref(storage, `${fileName}`);
+
+        //Delete the file
+        deleteObject(imageToDeleteRef)
+          .then(() => {
+            toast.success('Images deleted');
+          })
+          .catch((error) => {
+            toast.error('Failed to delete images');
+          });
+      });
 
       // Delete firestore record
-      //await deleteDoc(doc(db, 'listings', listingId));
+      await deleteDoc(doc(db, 'listings', listingId));
       console.log('Delete doc');
 
       // show newest state after delete
