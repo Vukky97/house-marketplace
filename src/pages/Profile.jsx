@@ -16,6 +16,7 @@ import ListingItem from '../components/ListingItem';
 import { toast } from 'react-toastify';
 import arrowRight from '../assets/svg/keyboardArrowRightIcon.svg';
 import homeIcon from '../assets/svg/homeIcon.svg';
+import { getStorage, ref, deleteObject } from 'firebase/storage';
 
 function Profile() {
   const auth = getAuth();
@@ -91,9 +92,28 @@ function Profile() {
     }));
   };
 
+  // Delete from firestore
   const onDelete = async (listingId) => {
     if (window.confirm('Are you sure you want to delete?')) {
-      await deleteDoc(doc(db, 'listings', listingId));
+      // Delete pictures from firebase filestorage
+      const storage = getStorage();
+
+      console.log(listings[0].data.imageUrls);
+      // Create a reference to the file to delete
+      const imageToDeleteRef = ref(storage, 'images/desert.jpg');
+      // Delete the file
+      // deleteObject(imageToDeleteRef)
+      //   .then(() => {
+      //     // File deleted successfully
+      //     console.log('delete pics runs');
+      //   })
+      //   .catch((error) => {
+      //     toast.error('Failed to delete images');
+      //   });
+
+      // Delete firestore record
+      //await deleteDoc(doc(db, 'listings', listingId));
+      console.log('Delete doc');
 
       // show newest state after delete
       const updatedListings = listings.filter(

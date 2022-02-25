@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-// to get link text
-import { useParams } from 'react-router-dom';
 import {
   collection,
   getDocs,
@@ -20,7 +18,7 @@ function Offers() {
   const [loading, setLoading] = useState(true);
   const [lastFetchedListing, setLastFetchedListing] = useState(null);
 
-  const params = useParams();
+  const listingsPerRequest = 10;
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -33,7 +31,7 @@ function Offers() {
           listingsRef,
           where('offer', '==', true),
           orderBy('timestamp', 'desc'),
-          limit(10)
+          limit(listingsPerRequest)
         );
 
         // Execute query
@@ -73,7 +71,7 @@ function Offers() {
         where('offer', '==', true),
         orderBy('timestamp', 'desc'),
         startAfter(lastFetchedListing),
-        limit(10)
+        limit(listingsPerRequest)
       );
 
       // Execute query
@@ -120,7 +118,7 @@ function Offers() {
           </main>
           <br />
           <br />
-          {lastFetchedListing && (
+          {lastFetchedListing && listings.length % listingsPerRequest === 0 && (
             <p className='loadMore' onClick={onFetchMoreListings}>
               Load More
             </p>

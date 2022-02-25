@@ -21,6 +21,7 @@ function Category() {
   const [lastFetchedListing, setLastFetchedListing] = useState(null);
 
   const params = useParams();
+  const listingsPerRequest = 10;
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -33,7 +34,7 @@ function Category() {
           listingsRef,
           where('type', '==', params.categoryName),
           orderBy('timestamp', 'desc'),
-          limit(10)
+          limit(listingsPerRequest)
         );
 
         // Execute query
@@ -72,7 +73,7 @@ function Category() {
         where('type', '==', params.categoryName),
         orderBy('timestamp', 'desc'),
         startAfter(lastFetchedListing),
-        limit(10)
+        limit(listingsPerRequest)
       );
 
       // Execute query
@@ -124,7 +125,7 @@ function Category() {
 
           <br />
           <br />
-          {lastFetchedListing && (
+          {lastFetchedListing && listings.length % listingsPerRequest === 0 && (
             <p className='loadMore' onClick={onFetchMoreListings}>
               Load More
             </p>
